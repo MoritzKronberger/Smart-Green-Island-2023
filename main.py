@@ -3,7 +3,7 @@ import numpy as np
 from typing import Any
 from components.camera import Camera
 from components.ui import UI
-from components.pool import Pool
+from components.pool import Pool, PoolUI
 from logger import logger
 
 
@@ -81,6 +81,8 @@ def main() -> None:
 
     # Compose UI
     ui = UI()
+    pool_ui = PoolUI(pool)
+    ui.add_ui_state(pool_ui)
 
     # Start render loop
     render(camera, ui, pool)

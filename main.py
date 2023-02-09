@@ -1,4 +1,4 @@
-from mock.camera import render_capture
+from components.camera import render_capture
 
 
 def main() -> None:

@@ -1,46 +1,42 @@
 """Load an image as a mock camera capture."""
 
 import cv2
-import numpy as np
 from logger import logger
-from pool import Pool
-from observer import Observer
-
-__mock_image_path = 'assets/pool.png'
 
 
-def render_capture(observer: Observer, pool: Pool, refresh_rate_ms: int = 15) -> None:
-    """Render an image as a mock camera capture using OpenCV."""
-    logger.info('Start rendering mock camera capture')
+class Camera():
+    """Handle (mock) OpenCV camera capture."""
+    __mock_image_path: str
+    __camera: int
+    __capture: cv2.VideoCapture
+    __mock_capture: cv2.Mat
+    __mock: bool
 
-    # Run indefinitely until `esc`-key is pressed or error is reached
-    while True:
-        try:
-            # Create fake capture
-            mock_capture = cv2.imread(__mock_image_path)
-            # Render pool
-            pool.visualize(mock_capture)
-            # Show mock camera feed
-            cv2.imshow('Mock camera feed', mock_capture)
+    def __init__(self, mock_image_path: str, camera: int, mock: bool) -> None:
+        """Set up (mock) camera instance."""
+        self.__mock_image_path = mock_image_path
+        self.__camera = camera
+        self.__mock = mock
 
-            def __handle_mouse(event: int, x: float, y: float, flags: int, param: int) -> None:
-                mouse_pos = np.array([x, y])
-                observer.handle_mouse_click(event, mouse_pos, pool)
+        # Create (mock) capture
+        self.__create_capture()
 
-            cv2.setMouseCallback('Mock camera feed', __handle_mouse)
+        logger.info(
+            f'Created camera capture'
+            f' {f"using mock image {self.__mock_image_path}" if self.__mock else f"using camera {self.__camera}"}'
+        )
 
-            # Await keypress
-            keypress = cv2.waitKey(refresh_rate_ms)
+    def __create_capture(self) -> None:
+        """Create (mock) OpenCV capture using camera Id."""
+        if self.__mock:
+            self.__mock_capture = cv2.imread(self.__mock_image_path)
+        else:
+            self.__capture = cv2.VideoCapture(self.__camera)
 
-            # Close window on `esc`-press
-            if keypress == 27:
-                break
-        # Close window on error
-        except Exception as e:
-            logger.error(e)
-            break
-
-    # Cleanup after ending imshow-loop
-    cv2.destroyAllWindows()
-
-    logger.info('Stopped rendering mock camera capture')
+    def read_capture(self) -> cv2.Mat:
+        """Read (mock) OpenCV capture."""
+        if self.__mock:
+            return self.__mock_capture.copy()
+        else:
+            _, image = self.__capture.read()
+            return image.copy()

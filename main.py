@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
+from typing import Any
 from components.camera import Camera
+from components.ui import UI
 from components.pool import Pool
 from logger import logger
 
@@ -9,7 +11,7 @@ WINDOW_NAME = 'Camera capture'
 MOCK_IMAGE_PATH = 'assets/pool.png'
 
 
-def render(camera: Camera, pool: Pool, refresh_rate_ms: int = 15) -> None:
+def render(camera: Camera, ui: UI, pool: Pool, refresh_rate_ms: int = 15) -> None:
     """Render event loop using OpenCV."""
     logger.info('Start rendering camera capture')
 
@@ -26,6 +28,9 @@ def render(camera: Camera, pool: Pool, refresh_rate_ms: int = 15) -> None:
             # Render pool boundaries
             pool.visualize(image)
 
+            # Render the UI
+            ui.render(image)
+
             # Show rendered image
             cv2.imshow(WINDOW_NAME, image)
 
@@ -33,8 +38,17 @@ def render(camera: Camera, pool: Pool, refresh_rate_ms: int = 15) -> None:
             # Handle inputs #
             #################
 
+            # Handle mouse events
+            def __handle_mouse_event(event: int, x_pos: int, y_pos: int, *_: Any) -> None:  # type: ignore
+                # Process mouse event using UI
+                ui.handle_mouse_event(event, np.array([x_pos, y_pos]))
+            cv2.setMouseCallback(WINDOW_NAME, __handle_mouse_event)
+
             # Await keypress
             keypress = cv2.waitKey(refresh_rate_ms)
+
+            # Process keypress using UI
+            ui.handle_keypress(keypress)
 
             # Close window on `esc`-press
             if keypress == 27:
@@ -51,12 +65,12 @@ def render(camera: Camera, pool: Pool, refresh_rate_ms: int = 15) -> None:
 
 
 def main() -> None:
+    # Create components
     camera = Camera(
         mock_image_path=MOCK_IMAGE_PATH,
         camera=1,
         mock=True
     )
-
     pool = Pool(
         top_left=np.array([20, 20]),
         top_right=np.array([1000, 20]),
@@ -65,7 +79,11 @@ def main() -> None:
         top_left_bottom_right_distance_cm=1_000
     )
 
-    render(camera, pool)
+    # Compose UI
+    ui = UI()
+
+    # Start render loop
+    render(camera, ui, pool)
 
 
 if __name__ == "__main__":

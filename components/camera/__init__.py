@@ -2,6 +2,7 @@
 
 import cv2
 import numpy as np
+from scipy.spatial import distance
 from logger import logger
 from util_types import VecFloat
 
@@ -48,9 +49,15 @@ class Camera():
                                top_right: VecFloat,
                                bottom_left: VecFloat,
                                bottom_right: VecFloat,
-                               corrected_width: int = 1000,
-                               corrected_height: int = 1000) -> cv2.Mat:
+                               corrected_width: int = 1000) -> cv2.Mat:
         """Read capture and correct perspective."""
+        # Estimate aspect ratio (rough)
+        # to get height for corrected capture.
+        width = distance.euclidean(top_left, top_right)
+        height = distance.euclidean(top_left, bottom_left)
+        reverse_aspect_ratio = height / width
+        corrected_height = int(corrected_width * reverse_aspect_ratio)
+
         # Get transformation matrix
         M = cv2.getPerspectiveTransform(
             # Current corner locations

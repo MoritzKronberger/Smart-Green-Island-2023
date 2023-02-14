@@ -8,7 +8,7 @@ from logger import logger
 
 
 WINDOW_NAME = 'Camera capture'
-MOCK_IMAGE_PATH = 'assets/pool.png'
+MOCK_IMAGE_PATH = 'assets/pool.jpg'
 
 
 def render(camera: Camera, ui: UI, pool: Pool, refresh_rate_ms: int = 15) -> None:
@@ -31,8 +31,19 @@ def render(camera: Camera, ui: UI, pool: Pool, refresh_rate_ms: int = 15) -> Non
             # Render the UI
             ui.render(image)
 
-            # Show rendered image
+            # Show capture
             cv2.imshow(WINDOW_NAME, image)
+
+            # Read corrected capture
+            corrected_image = camera.read_corrected_capture(
+                pool.top_left,
+                pool.top_right,
+                pool.bottom_left,
+                pool.bottom_right
+            )
+
+            # Show corrected capture
+            cv2.imshow('Corrected capture', corrected_image)
 
             #################
             # Handle inputs #
@@ -73,9 +84,9 @@ def main() -> None:
     )
     pool = Pool(
         top_left=np.array([20, 20]),
-        top_right=np.array([1000, 20]),
-        bottom_left=np.array([20, 1000]),
-        bottom_right=np.array([1000, 1000]),
+        top_right=np.array([400, 20]),
+        bottom_left=np.array([20, 400]),
+        bottom_right=np.array([400, 400]),
         top_left_bottom_right_distance_cm=1_000
     )
 

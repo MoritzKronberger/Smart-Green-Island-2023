@@ -1,3 +1,5 @@
+"""Autonomous Ocean Garbage Collector backend."""
+
 import cv2
 import numpy as np
 from typing import Any
@@ -76,6 +78,7 @@ def render(camera: Camera, ui: UI, pool: Pool, refresh_rate_ms: int = 15) -> Non
 
 
 def main() -> None:
+    """Run Autonomous Ocean Garbage Collector backend."""
     # Create components
     camera = Camera(
         mock_image_path=MOCK_IMAGE_PATH,

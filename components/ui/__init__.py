@@ -73,6 +73,7 @@ class UI():
             self.__ui_state.on_key(keypress)
 
     def render(self, image: cv2.Mat) -> None:
+        """Render UI (and all UI states) to OpenCV image."""
         # Appearance constants
         FONT_SCALE = 0.5
         FONT_THICKNESS = 1

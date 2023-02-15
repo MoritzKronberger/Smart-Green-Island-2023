@@ -1,4 +1,4 @@
-# Smart-Green-Island-2023-MARS
+# Smart Green Island 2023
 
 Repository for the 2023 Smart Green Island Challenge "Autonomous Ocean Garbage Collector"
 

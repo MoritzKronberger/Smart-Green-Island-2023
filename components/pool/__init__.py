@@ -1,10 +1,14 @@
 """Set up pool dimensions."""
 
+import json
 import cv2
+import numpy as np
 import pyshine as ps
 from typing import Literal
+from components.helpers import create_cache_dir_if_not_exists
 from components.ui import UIState
 from util_types import VecFloat
+from logger import logger
 
 
 class Pool():
@@ -14,19 +18,33 @@ class Pool():
     bottom_left: VecFloat
     bottom_right: VecFloat
     top_left_bottom_right_distance_cm: float
+    cache_constraints: bool
 
     def __init__(self,
                  top_left: VecFloat,
                  top_right: VecFloat,
                  bottom_left: VecFloat,
                  bottom_right: VecFloat,
-                 top_left_bottom_right_distance_cm: float) -> None:
+                 top_left_bottom_right_distance_cm: float,
+                 cache_constraints: bool = True) -> None:
         """Create pool with specific dimensions."""
-        self.top_left = top_left
-        self.top_right = top_right
-        self.bottom_left = bottom_left
-        self.bottom_right = bottom_right
+        if cache_constraints:
+            try:
+                with open('cache/pool_constraints.json', 'r') as f:
+                    constraints = json.load(f)
+                    self.top_left = np.array(constraints.get('top_left'))
+                    self.top_right = np.array(constraints.get('top_right'))
+                    self.bottom_left = np.array(constraints.get('bottom_left'))
+                    self.bottom_right = np.array(constraints.get('bottom_right'))
+            except Exception:
+                logger.warn('Failed reading pool constraints from cache')
+        else:
+            self.top_left = top_left
+            self.top_right = top_right
+            self.bottom_left = bottom_left
+            self.bottom_right = bottom_right
         self.top_left_bottom_right_distance_cm = top_left_bottom_right_distance_cm
+        self.cache_constraints = cache_constraints
 
     def visualize(self, image: cv2.Mat, color: tuple[int, int, int] = (0, 0, 255), thickness: float = 2) -> None:
         """Render pool boundaries to OpenCV image."""
@@ -38,6 +56,24 @@ class Pool():
         cv2.line(image, self.top_left, self.bottom_left, color, thickness)
         # Top-right to bottom-right
         cv2.line(image, self.top_right, self.bottom_right, color, thickness)
+
+    def write_constraints(self) -> None:
+        """Write pool constraints to cache if cache is enabled for pool instance."""
+        if self.cache_constraints:
+            try:
+                create_cache_dir_if_not_exists()
+                with open('cache/pool_constraints.json', 'w+') as f:
+                    json.dump(
+                        {
+                            'top_left': self.top_left.tolist(),
+                            'top_right': self.top_right.tolist(),
+                            'bottom_left': self.bottom_left.tolist(),
+                            'bottom_right': self.bottom_right.tolist(),
+                        },
+                        f
+                    )
+            except Exception:
+                logger.warn('Failed writing pool constraints to cache')
 
 
 # Enum for corner shorthands
@@ -56,6 +92,7 @@ class PoolUI(UIState):
     }
 
     def __init__(self, pool: Pool) -> None:
+        """Create new PoolUI instance."""
         super().__init__(
             keycode=112,
             keyname='P',
@@ -81,6 +118,8 @@ class PoolUI(UIState):
                 self.pool.bottom_left = mouse_pos
             elif self.corner == 'br':
                 self.pool.bottom_right = mouse_pos
+            # Try writing constraints to cache
+            self.pool.write_constraints()
 
     def render(self, image: cv2.Mat) -> None:
         """Render corner labels."""

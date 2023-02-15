@@ -101,7 +101,7 @@ class UI():
         if self.__ui_state is None:
             # Draw header text
             __add_text(
-                'UI HEADER',
+                'Press "KEY" to toggle the menus',
                 x_pos=HSPACE,
                 y_pos=VSPACE
             )

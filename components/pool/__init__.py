@@ -28,6 +28,9 @@ class Pool():
                  top_left_bottom_right_distance_cm: float,
                  cache_constraints: bool = True) -> None:
         """Create pool with specific dimensions."""
+        self.top_left_bottom_right_distance_cm = top_left_bottom_right_distance_cm
+        self.cache_constraints = cache_constraints
+        # Try loading constraints from cache
         if cache_constraints:
             try:
                 with open('cache/pool_constraints.json', 'r') as f:
@@ -36,15 +39,15 @@ class Pool():
                     self.top_right = np.array(constraints.get('top_right'))
                     self.bottom_left = np.array(constraints.get('bottom_left'))
                     self.bottom_right = np.array(constraints.get('bottom_right'))
+                    # Skip setting constraints from parameters if successful
+                    return
             except Exception:
                 logger.warn('Failed reading pool constraints from cache')
-        else:
-            self.top_left = top_left
-            self.top_right = top_right
-            self.bottom_left = bottom_left
-            self.bottom_right = bottom_right
-        self.top_left_bottom_right_distance_cm = top_left_bottom_right_distance_cm
-        self.cache_constraints = cache_constraints
+        # Set constraints from parameters if cache could not be loaded
+        self.top_left = top_left
+        self.top_right = top_right
+        self.bottom_left = bottom_left
+        self.bottom_right = bottom_right
 
     def visualize(self, image: cv2.Mat, color: tuple[int, int, int] = (0, 0, 255), thickness: float = 2) -> None:
         """Render pool boundaries to OpenCV image."""

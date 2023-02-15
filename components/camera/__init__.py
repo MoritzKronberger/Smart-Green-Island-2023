@@ -1,7 +1,10 @@
 """Load an image as a mock camera capture."""
 
 import cv2
+import numpy as np
+from scipy.spatial import distance
 from logger import logger
+from util_types import VecFloat
 
 
 class Camera():
@@ -40,3 +43,45 @@ class Camera():
         else:
             _, image = self.__capture.read()
             return image.copy()
+
+    def read_corrected_capture(self,
+                               top_left: VecFloat,
+                               top_right: VecFloat,
+                               bottom_left: VecFloat,
+                               bottom_right: VecFloat,
+                               corrected_width: int = 1000) -> cv2.Mat:
+        """Read capture and correct perspective."""
+        # Estimate aspect ratio (rough)
+        # to get height for corrected capture.
+        width = distance.euclidean(top_left, top_right)
+        height = distance.euclidean(top_left, bottom_left)
+        reverse_aspect_ratio = height / width
+        corrected_height = int(corrected_width * reverse_aspect_ratio)
+
+        # Get transformation matrix
+        M = cv2.getPerspectiveTransform(
+            # Current corner locations
+            np.array([
+                top_left,
+                top_right,
+                bottom_left,
+                bottom_right
+            ], dtype=np.float32),
+            # Desired corner locations
+            np.array([
+                (0, 0),
+                (corrected_width, 0),
+                (0, corrected_height),
+                (corrected_width, corrected_height)
+            ], dtype=np.float32)
+        )
+        # Transform current capture
+        image = self.read_capture()
+        transformed_image = cv2.warpPerspective(
+            image,
+            M,
+            (corrected_width, corrected_height),
+            flags=cv2.INTER_LINEAR
+        )
+
+        return transformed_image

@@ -1,0 +1,19 @@
+{
+  // Static Python type-checking
+  "python.analysis.inlayHints.functionReturnTypes": true,
+  "python.analysis.inlayHints.variableTypes": true,
+  "python.analysis.typeCheckingMode": "strict",
+  "python.analysis.diagnosticSeverityOverrides": {
+    "reportUnknownVariableType": "none",
+    "reportMissingTypeStubs": "none",
+    "reportUnknownMemberType": "none",
+    "reportUnnecessaryCast": "none",
+    "reportUnknownParameterType": "none",
+    "reportUnknownArgumentType": "none"
+  },
+  // Enable Flake8 linter
+  "python.linting.flake8Enabled": true,
+  // Enable Mypy type-checker
+  "python.linting.mypyEnabled": true,
+  "python.linting.mypyArgs": ["--config-file=./mypy.ini"]
+}

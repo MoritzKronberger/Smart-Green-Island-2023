@@ -92,6 +92,7 @@ class PoolUI(UIState):
     }
 
     def __init__(self, pool: Pool) -> None:
+        """Create new PoolUI instance."""
         super().__init__(
             keycode=112,
             keyname='P',

@@ -1,0 +1,28 @@
+# Reference:
+# https://github.com/marketplace/actions/mypy-action
+# https://doedotdev.medium.com/mypy-for-github-action-7da1ebee99e7
+
+name: Lint
+
+on:
+  pull_request:
+    paths:
+      - '**.py'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Setup Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.10
+          architecture: x64
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: mypy
+        run: mypy main.py
+      - name: flake8
+        run: flake8

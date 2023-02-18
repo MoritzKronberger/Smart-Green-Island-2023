@@ -2,8 +2,8 @@
 
 import cv2
 import pyshine as ps
-from util_types import VecFloat
-from logger import logger
+from app.util_types import VecFloat
+from app.logger import logger
 
 
 class UIState():

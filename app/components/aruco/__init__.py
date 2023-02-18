@@ -7,9 +7,9 @@ from PIL import Image
 from cv2 import aruco
 from uuid import uuid4
 
-from components.helpers import create_dir_if_not_exists
-from util_types import VecFloat
-from logger import logger
+from app.components.helpers import create_dir_if_not_exists
+from app.util_types import VecFloat
+from app.logger import logger
 
 
 class Marker():

@@ -25,6 +25,6 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: mypy
-        run: mypy main.py
+        run: mypy ./app/main.py
       - name: flake8
         run: flake8

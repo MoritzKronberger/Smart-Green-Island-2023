@@ -3,8 +3,8 @@
 import cv2
 import numpy as np
 from scipy.spatial import distance
-from logger import logger
-from util_types import VecFloat
+from app.logger import logger
+from app.util_types import VecFloat
 
 
 class Camera():

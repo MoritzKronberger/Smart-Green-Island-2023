@@ -3,11 +3,11 @@
 import cv2
 import numpy as np
 from typing import Any
-from components.aruco import ArUco
-from components.camera import Camera
-from components.ui import UI
-from components.pool import Pool, PoolUI
-from logger import logger
+from app.components.aruco import ArUco
+from app.components.camera import Camera
+from app.components.ui import UI
+from app.components.pool import Pool, PoolUI
+from app.logger import logger
 
 
 WINDOW_NAME = 'Camera capture'

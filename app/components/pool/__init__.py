@@ -5,10 +5,10 @@ import cv2
 import numpy as np
 import pyshine as ps
 from typing import Literal
-from components.helpers import create_dir_if_not_exists
-from components.ui import UIState
-from util_types import VecFloat
-from logger import logger
+from app.components.helpers import create_dir_if_not_exists
+from app.components.ui import UIState
+from app.util_types import VecFloat
+from app.logger import logger
 
 
 class Pool():

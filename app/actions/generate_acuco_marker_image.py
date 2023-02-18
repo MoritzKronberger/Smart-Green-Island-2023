@@ -1,6 +1,7 @@
 """Generate ArUco marker as PNG image."""
 
 import inquirer
+from app.settings import ARUCO_DICT
 from app.components.aruco import ArUco
 
 
@@ -39,5 +40,7 @@ def generate_marker() -> None:
         marker_id = int(answers['Id'])
         filename = answers['Filename']
         marker_size = int(answers['Size'])
-        aruco = ArUco()
+        aruco = ArUco(
+            aruco_dict=ARUCO_DICT
+        )
         aruco.generate_marker_image(marker_id, filename, marker_size)

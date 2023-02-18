@@ -70,9 +70,11 @@ class ArUco():
         marker_pixels = self.get_marker_pixels(marker_id, size_px)
         pil_image = Image.fromarray(marker_pixels)
         create_dir_if_not_exists('app/out')
-        pil_image.save(f'out/{name or uuid4()}_ID_{marker_id}.png')
+        filename = f'app/out/{name or uuid4()}_ID_{marker_id}.png'
+        pil_image.save(filename)
+        logger.info(f'Generated new ArUco marker: {filename}')
 
-    def detect_marker(self, image: cv2.Mat, marker_id: int) -> Marker | None:
+    def detect_marker(self, image: cv2.Mat, marker_id: int, debug: bool = False) -> Marker | None:
         """Detect specific ArUco marker in image using its Id."""
         corners, ids, _ = self.__detector.detectMarkers(image)
         try:
@@ -89,7 +91,8 @@ class ArUco():
                 corners=marker_corners,
             )
         except Exception:
-            logger.warn(f'Could not detect marker with id {marker_id}')
+            if debug:
+                logger.warn(f'Could not detect marker with id {marker_id}')
             return None
 
     def render_marker(self, image: cv2.Mat, marker_id: int, size: int, x_pos: int, y_pos: int) -> None:

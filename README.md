@@ -29,7 +29,7 @@ pip install -r requirements.txt
 Run the application with:
 
 ```bash
-python ./app/main.py
+python -m app
 ```
 
 ## Typechecks and Linter
@@ -37,7 +37,7 @@ python ./app/main.py
 Run Mypy for static typechecking:
 
 ```bash
-mypy ./app/main.py
+mypy -m app
 ```
 
 Run flake8 for linting:

@@ -64,7 +64,7 @@ class Pool():
         """Write pool constraints to cache if cache is enabled for pool instance."""
         if self.cache_constraints:
             try:
-                create_dir_if_not_exists('cache')
+                create_dir_if_not_exists('app/cache')
                 with open('cache/pool_constraints.json', 'w+') as f:
                     json.dump(
                         {

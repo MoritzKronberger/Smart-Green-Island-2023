@@ -69,7 +69,7 @@ class ArUco():
         """Generate image for ArUco marker using its Id."""
         marker_pixels = self.get_marker_pixels(marker_id, size_px)
         pil_image = Image.fromarray(marker_pixels)
-        create_dir_if_not_exists('out')
+        create_dir_if_not_exists('app/out')
         pil_image.save(f'out/{name or uuid4()}_ID_{marker_id}.png')
 
     def detect_marker(self, image: cv2.Mat, marker_id: int) -> Marker | None:

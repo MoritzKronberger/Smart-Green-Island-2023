@@ -11,7 +11,7 @@ from app.logger import logger
 
 
 WINDOW_NAME = 'Camera capture'
-MOCK_IMAGE_PATH = 'assets/pool.jpg'
+MOCK_IMAGE_PATH = 'app/assets/pool.jpg'
 
 
 def render(camera: Camera, ui: UI, pool: Pool, aruco: ArUco, refresh_rate_ms: int = 15) -> None:
@@ -88,7 +88,7 @@ def render(camera: Camera, ui: UI, pool: Pool, aruco: ArUco, refresh_rate_ms: in
     logger.info('Stopped rendering camera capture')
 
 
-def main() -> None:
+def run() -> None:
     """Run Autonomous Ocean Garbage Collector backend."""
     # Create components
     camera = Camera(
@@ -112,7 +112,3 @@ def main() -> None:
 
     # Start render loop
     render(camera, ui, pool, aruco)
-
-
-if __name__ == "__main__":
-    main()

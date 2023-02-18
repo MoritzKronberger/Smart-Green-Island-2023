@@ -27,14 +27,23 @@ class Marker():
 
     def visualize(self, image: cv2.Mat, radius: int = 4, color: tuple[int, int, int] = (0, 255, 0)) -> None:
         """Render detected marker to OpenCv image."""
-        # Draw circle for each corner
-        for corner in self.corners:
+        # Draw circle for each corner and add index number
+        for i, corner in enumerate(self.corners):
             cv2.circle(
                 image,
                 corner.astype(int),
                 radius,
-                color,
+                color=(0, 0, 255) if i == 0 else color,  # top.left: red
                 thickness=-1
+            )
+            cv2.putText(
+                image,
+                text=str(i),
+                org=corner.astype(int),
+                fontFace=cv2.FONT_HERSHEY_SIMPLEX,
+                fontScale=0.5,
+                color=color,
+                thickness=1,
             )
         # Draw marker Id on the marker center
         text_origin = self.center - np.array([10, -10])

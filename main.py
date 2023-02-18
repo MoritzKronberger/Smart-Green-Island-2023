@@ -3,6 +3,7 @@
 import cv2
 import numpy as np
 from typing import Any
+from components.aruco import ArUco
 from components.camera import Camera
 from components.ui import UI
 from components.pool import Pool, PoolUI
@@ -13,7 +14,7 @@ WINDOW_NAME = 'Camera capture'
 MOCK_IMAGE_PATH = 'assets/pool.jpg'
 
 
-def render(camera: Camera, ui: UI, pool: Pool, refresh_rate_ms: int = 15) -> None:
+def render(camera: Camera, ui: UI, pool: Pool, aruco: ArUco, refresh_rate_ms: int = 15) -> None:
     """Render event loop using OpenCV."""
     logger.info('Start rendering camera capture')
 
@@ -26,6 +27,11 @@ def render(camera: Camera, ui: UI, pool: Pool, refresh_rate_ms: int = 15) -> Non
 
             # Read capture
             image = camera.read_capture()
+
+            # Detect marker
+            marker = aruco.detect_marker(image, 1)
+            if marker:
+                marker.visualize(image)
 
             # Render pool boundaries
             pool.visualize(image)
@@ -43,6 +49,11 @@ def render(camera: Camera, ui: UI, pool: Pool, refresh_rate_ms: int = 15) -> Non
                 pool.bottom_left,
                 pool.bottom_right
             )
+
+            # Detect marker in corrected image
+            corrected_marker = aruco.detect_marker(corrected_image, 1)
+            if corrected_marker:
+                corrected_marker.visualize(corrected_image)
 
             # Show corrected capture
             cv2.imshow('Corrected capture', corrected_image)
@@ -92,6 +103,7 @@ def main() -> None:
         bottom_right=np.array([400, 400]),
         top_left_bottom_right_distance_cm=1_000
     )
+    aruco = ArUco()
 
     # Compose UI
     ui = UI()
@@ -99,7 +111,7 @@ def main() -> None:
     ui.add_ui_state(pool_ui)
 
     # Start render loop
-    render(camera, ui, pool)
+    render(camera, ui, pool, aruco)
 
 
 if __name__ == "__main__":

@@ -5,7 +5,7 @@ import cv2
 import numpy as np
 import pyshine as ps
 from typing import Literal
-from components.helpers import create_cache_dir_if_not_exists
+from components.helpers import create_dir_if_not_exists
 from components.ui import UIState
 from util_types import VecFloat
 from logger import logger
@@ -64,7 +64,7 @@ class Pool():
         """Write pool constraints to cache if cache is enabled for pool instance."""
         if self.cache_constraints:
             try:
-                create_cache_dir_if_not_exists()
+                create_dir_if_not_exists('cache')
                 with open('cache/pool_constraints.json', 'w+') as f:
                     json.dump(
                         {

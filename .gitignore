@@ -130,3 +130,6 @@ dmypy.json
 
 # App cache
 cache
+
+# Out directory (ArUco markers)
+out

@@ -1,3 +1,5 @@
+"""Handle tracking of ArUco markers."""
+
 import cv2
 import numpy as np
 import numpy.typing as npt

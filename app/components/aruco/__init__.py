@@ -5,6 +5,7 @@ import numpy as np
 import numpy.typing as npt
 from PIL import Image
 from cv2 import aruco
+from scipy.spatial import distance
 from uuid import uuid4
 
 from app.components.helpers import create_dir_if_not_exists
@@ -48,14 +49,42 @@ class Marker():
         # Draw marker Id on the marker center
         text_origin = self.center - np.array([10, -10])
         cv2.putText(
-                image,
-                text=str(self.id),
-                org=text_origin.astype(int),
-                fontFace=cv2.FONT_HERSHEY_SIMPLEX,
-                fontScale=1,
-                color=color,
-                thickness=2,
+            image,
+            text=str(self.id),
+            org=text_origin.astype(int),
+            fontFace=cv2.FONT_HERSHEY_SIMPLEX,
+            fontScale=1,
+            color=color,
+            thickness=2,
+        )
+
+    def get_perspective_transform_matrix(self) -> VecFloat:
+        """Generate perspective transform matrix from ArUco marker corners."""
+        def __get_corrected_corners(top_left: VecFloat, width: int) -> VecFloat:
+            top_left_x, top_left_y = top_left
+            # Set corners at perfect `width`-distance from `top_left`
+            return np.array(
+                [
+                    top_left,
+                    [top_left_x+width, top_left_y],
+                    [top_left_x+width, top_left_y+width],
+                    [top_left_x, top_left_y+width],
+                ],
+                dtype=np.float32
             )
+
+        # Estimate marker width
+        marker_width_px = int(distance.euclidean(self.corners[0], self.corners[1]))
+
+        # Get perspective transform matrix
+        M = cv2.getPerspectiveTransform(
+            # Current corner locations
+            self.corners,
+            # Desired corner locations
+            __get_corrected_corners(self.corners[0], marker_width_px)
+        )
+
+        return np.array(M, dtype=np.float32)
 
 
 class ArUco():

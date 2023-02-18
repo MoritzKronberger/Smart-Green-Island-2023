@@ -1,8 +1,6 @@
 """Load an image as a mock camera capture."""
 
 import cv2
-import numpy as np
-from scipy.spatial import distance
 from app.logger import logger
 from app.util_types import VecFloat
 
@@ -14,6 +12,7 @@ class Camera():
     __capture: cv2.VideoCapture
     __mock_capture: cv2.Mat
     __mock: bool
+    perspective_transform_matrix: VecFloat | None = None
 
     def __init__(self, mock_image_path: str, camera: int, mock: bool) -> None:
         """Set up (mock) camera instance."""
@@ -44,44 +43,17 @@ class Camera():
             _, image = self.__capture.read()
             return image.copy()
 
-    def read_corrected_capture(self,
-                               top_left: VecFloat,
-                               top_right: VecFloat,
-                               bottom_left: VecFloat,
-                               bottom_right: VecFloat,
-                               corrected_width: int = 1000) -> cv2.Mat:
+    def read_corrected_capture(self) -> cv2.Mat:
         """Read capture and correct perspective."""
-        # Estimate aspect ratio (rough)
-        # to get height for corrected capture.
-        width = distance.euclidean(top_left, top_right)
-        height = distance.euclidean(top_left, bottom_left)
-        reverse_aspect_ratio = height / width
-        corrected_height = int(corrected_width * reverse_aspect_ratio)
-
-        # Get transformation matrix
-        M = cv2.getPerspectiveTransform(
-            # Current corner locations
-            np.array([
-                top_left,
-                top_right,
-                bottom_left,
-                bottom_right
-            ], dtype=np.float32),
-            # Desired corner locations
-            np.array([
-                (0, 0),
-                (corrected_width, 0),
-                (0, corrected_height),
-                (corrected_width, corrected_height)
-            ], dtype=np.float32)
-        )
-        # Transform current capture
         image = self.read_capture()
-        transformed_image = cv2.warpPerspective(
-            image,
-            M,
-            (corrected_width, corrected_height),
-            flags=cv2.INTER_LINEAR
-        )
-
-        return transformed_image
+        height, width = image.shape[:2]
+        if self.perspective_transform_matrix is not None:
+            # Transform current capture
+            return cv2.warpPerspective(
+                image,
+                self.perspective_transform_matrix,
+                (width, height),
+                flags=cv2.INTER_LINEAR
+            )
+        else:
+            return image

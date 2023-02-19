@@ -52,7 +52,7 @@ class Marker():
     corners: VecFloat | None
     center: VecFloat | None
     debug: bool
-    __corner_buffer: deque[VecFloat] | None
+    __corner_buffer: deque[VecFloat] | None = None
 
     def __init__(self, id: int, smooth_steps: int = 0, debug: bool = False) -> None:
         """Create ArUco marker instance.

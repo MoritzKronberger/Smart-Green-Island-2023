@@ -7,7 +7,8 @@ from app.components.camera import Camera
 from app.components.capture_loop import CaptureLoop
 from app.components.ui import UI, UIState
 from app.components.helpers import create_dir_if_not_exists
-from app.settings import ARUCO_DICT, CAMERA, MOCK_IMAGE_PATH, PERSPECTIVE_CORRECTION_MARKER_BUFFER_SIZE, PERSPECTIVE_CORRECTION_MARKER_ID
+from app.settings import (ARUCO_DICT, CAMERA, MOCK_IMAGE_PATH,
+                          PERSPECTIVE_CORRECTION_MARKER_BUFFER_SIZE, PERSPECTIVE_CORRECTION_MARKER_ID)
 from app.logger import logger
 
 

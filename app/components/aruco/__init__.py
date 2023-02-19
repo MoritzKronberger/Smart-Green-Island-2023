@@ -80,7 +80,6 @@ class Marker():
             )
             # Set new corners as mean of corner buffer if smoothing is enabled
             if self.__corner_buffer is not None and not disable_smooth:
-                print(len(self.__corner_buffer))
                 self.__corner_buffer.append(marker_corners)
                 self.corners = np.mean(np.array(self.__corner_buffer), axis=0)
             # Else set the new corners directly

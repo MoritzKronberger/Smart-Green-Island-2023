@@ -1,6 +1,8 @@
 """Load an image as a mock camera capture."""
 
+import json
 import cv2
+import numpy as np
 from app.logger import logger
 from app.util_types import VecFloat
 
@@ -14,7 +16,11 @@ class Camera():
     __mock: bool
     perspective_transform_matrix: VecFloat | None = None
 
-    def __init__(self, mock_image_path: str, camera: int, mock: bool) -> None:
+    def __init__(self,
+                 mock_image_path: str,
+                 camera: int,
+                 mock: bool,
+                 perspective_correction_from_cache: bool = False) -> None:
         """Set up (mock) camera instance."""
         self.__mock_image_path = mock_image_path
         self.__camera = camera
@@ -22,6 +28,13 @@ class Camera():
 
         # Create (mock) capture
         self.__create_capture()
+
+        if perspective_correction_from_cache:
+            try:
+                with open('app/cache/perspective_correction.json', 'r') as f:
+                    self.perspective_transform_matrix = np.array(json.load(f))
+            except Exception:
+                logger.warn('Failed reading perspective correction matrix from cache')
 
         logger.info(
             f'Created camera capture'

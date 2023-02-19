@@ -24,6 +24,12 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
+Create environment variables:
+
+```bash
+bash create_dotenv.sh
+```
+
 ## Run Application
 
 Run the application with:

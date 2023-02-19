@@ -47,35 +47,13 @@ class CorrectionUI(UIState):
             else:
                 logger.warn('Failed writing perspective correction to cache: no correction matrix exists')
 
-            print(perspective_transform_matrix)
 
-
-# Create Components
-camera = Camera(
-    mock_image_path=MOCK_IMAGE_PATH,
-    camera=CAMERA,
-    mock=False
-)
-aruco = ArUco(
-    aruco_dict=ARUCO_DICT
-)
-# Enable smoothing for static marker
-marker = Marker(
-    PERSPECTIVE_CORRECTION_MARKER_ID,
-    smooth_steps=PERSPECTIVE_CORRECTION_MARKER_BUFFER_SIZE
-)
-
-# Compose UI
-ui = UI()
-c_ui = CorrectionUI(camera)
-ui.add_ui_state(c_ui)
-
-# CONSTANTS
-MAIN_WINDOW_NAME = 'Camera capture'
-CORRECTED_WINDOW_NAME = 'Corrected capture'
-
-
-def __loop() -> None:
+def __loop(camera: Camera,
+           main_window_name: str,
+           corrected_window_name: str,
+           ui: UI,
+           aruco: ArUco,
+           marker: Marker) -> None:
     # Read capture
     image = camera.read_capture()
 
@@ -92,18 +70,50 @@ def __loop() -> None:
     ui.render(image)
 
     # Show capture
-    cv2.imshow(MAIN_WINDOW_NAME, image)
+    cv2.imshow(main_window_name, image)
 
     # Show corrected capture
     corrected_capture = camera.read_corrected_capture()
-    cv2.imshow(CORRECTED_WINDOW_NAME, corrected_capture)
+    cv2.imshow(corrected_window_name, corrected_capture)
 
 
 def configure_perspective_correction() -> None:
     """Configure perspective correction using ArUco marker."""
-    capture_loop = CaptureLoop(
-        __loop,
-        ui,
-        MAIN_WINDOW_NAME
+    # Create components
+    camera = Camera(
+        mock_image_path=MOCK_IMAGE_PATH,
+        camera=CAMERA,
+        mock=False
     )
-    capture_loop.run()
+    aruco = ArUco(
+        aruco_dict=ARUCO_DICT
+    )
+    # Enable smoothing for static marker
+    marker = Marker(
+        PERSPECTIVE_CORRECTION_MARKER_ID,
+        smooth_steps=PERSPECTIVE_CORRECTION_MARKER_BUFFER_SIZE
+    )
+
+    # Compose UI
+    ui = UI()
+    c_ui = CorrectionUI(camera)
+    ui.add_ui_state(c_ui)
+
+    # CONSTANTS
+    main_window_name = 'Camera capture'
+    corrected_window_name = 'Corrected capture'
+
+    # Run capture loop
+    capture_loop = CaptureLoop(
+        ui,
+        main_window_name
+    )
+    capture_loop.run(
+        __loop,
+        camera,
+        main_window_name,
+        corrected_window_name,
+        ui,
+        aruco,
+        marker
+    )

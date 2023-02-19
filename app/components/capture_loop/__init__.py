@@ -2,34 +2,32 @@
 
 import cv2
 import numpy as np
-from typing import Any, Callable
+from typing import Any, Callable, ParamSpec
 from app.components.ui import UI
 from app.logger import logger
 
-LoopCallback = Callable[[], None]
+P = ParamSpec('P')
 
 
 class CaptureLoop():
     """Handle OpenCV capture loop."""
-    __func: LoopCallback
     __ui: UI
     refresh_rate_ms: int
     interactive_window: str
 
-    def __init__(self, func: LoopCallback, ui: UI, interactive_window: str, refresh_rate_ms: int = 15) -> None:
+    def __init__(self, ui: UI, interactive_window: str, refresh_rate_ms: int = 15) -> None:
         """Create new OpenCV capture loop."""
-        self.__func = func
         self.__ui = ui
         self.refresh_rate_ms = refresh_rate_ms
         self.interactive_window = interactive_window
 
-    def run(self) -> None:
+    def run(self, func: Callable[P, None], *args: P.args, **kwargs: P.kwargs) -> None:
         """Run capture loop."""
         # Run indefinitely until `esc`-key is pressed or error is reached
         while True:
             try:
                 # Run loop callback
-                self.__func()
+                func(*args, **kwargs)
 
                 # Handle mouse events
                 def __handle_mouse_event(event: int, x_pos: int, y_pos: int, *_: Any) -> None:  # type: ignore

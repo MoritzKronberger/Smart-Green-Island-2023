@@ -1,21 +1,22 @@
 """Track the boat using ArUco markers and perspective correction."""
 
 import cv2
-from app.components.aruco import ArUco, Marker
+from app.components.aruco import ArUco
+from app.components.boat import Boat, BoatUI
 from app.components.camera import Camera
 from app.components.capture_loop import CaptureLoop
 from app.components.ui import UI
-from app.settings import ARUCO_DICT, BOAT_MARKER_ID, CAMERA, MOCK_IMAGE_PATH
+from app.settings import ARUCO_DICT, BOAT_MARKER_ID, BOAT_MARKER_SIZE_MM, CAMERA, MOCK_IMAGE_PATH
 
 
-def __loop(camera: Camera, window_name: str, ui: UI, aruco: ArUco, boat_marker: Marker) -> None:
+def __loop(camera: Camera, window_name: str, ui: UI, aruco: ArUco, boat: Boat) -> None:
     # Read capture
     image = camera.read_corrected_capture()
 
-    # Detect marker
-    boat_marker.detect(image, aruco)
+    # Calculate boat position, rotation and velocity
+    boat.update_location_and_velocity(image, aruco, 15)
     # Render marker
-    boat_marker.visualize(image)
+    boat.visualize(image)
 
     # Render the UI
     ui.render(image)
@@ -36,12 +37,15 @@ def track_boat() -> None:
     aruco = ArUco(
         aruco_dict=ARUCO_DICT
     )
-    marker = Marker(
-        BOAT_MARKER_ID
+    boat = Boat(
+        BOAT_MARKER_ID,
+        BOAT_MARKER_SIZE_MM
     )
 
     # Compose UI
     ui = UI()
+    boat_ui = BoatUI(boat)
+    ui.add_ui_state(boat_ui)
 
     window_name = 'Overhead capture'
 
@@ -56,5 +60,5 @@ def track_boat() -> None:
         window_name,
         ui,
         aruco,
-        marker
+        boat
     )

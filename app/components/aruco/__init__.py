@@ -94,7 +94,11 @@ class Marker():
             self.corners = None
             self.center = None
 
-    def visualize(self, image: cv2.Mat, radius: int = 4, color: tuple[int, int, int] = (0, 255, 0)) -> None:
+    def visualize(self,
+                  image: cv2.Mat,
+                  radius: int = 4,
+                  color: tuple[int, int, int] = (0, 255, 0),
+                  render_id: bool = True) -> None:
         """Render detected marker to OpenCV image."""
         if self.corners is not None and self.center is not None:
             # Draw circle for each corner and add index number
@@ -116,16 +120,17 @@ class Marker():
                     thickness=1,
                 )
             # Draw marker Id on the marker center
-            text_origin = self.center - np.array([10, -10])
-            cv2.putText(
-                image,
-                text=str(self.id),
-                org=text_origin.astype(int),
-                fontFace=cv2.FONT_HERSHEY_SIMPLEX,
-                fontScale=1,
-                color=color,
-                thickness=2,
-            )
+            if render_id:
+                text_origin = self.center - np.array([10, -10])
+                cv2.putText(
+                    image,
+                    text=str(self.id),
+                    org=text_origin.astype(int),
+                    fontFace=cv2.FONT_HERSHEY_SIMPLEX,
+                    fontScale=1,
+                    color=color,
+                    thickness=2,
+                )
         elif self.debug:
             logger.warn('Cannot render marker: no position exists')
 

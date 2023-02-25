@@ -1,3 +1,5 @@
+"""tkinter GUI interface."""
+
 import tkinter as tk
 from typing import Literal, TypeVar
 from app.logger import logger

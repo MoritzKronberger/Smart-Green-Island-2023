@@ -2,6 +2,8 @@
 
 import cv2
 from app.components.blob_detection import BlobDetection
+from app.components.blob_detection.gui import BlobDetectionGUI
+from app.components.blob_detection.params import BlobDetectionParams
 from app.components.camera import Camera
 from app.components.capture_loop import CaptureLoop
 from app.components.ui import UI
@@ -17,7 +19,7 @@ def __loop(camera: Camera,
     image = camera.read_capture()
 
     # Detect floating trash blobs
-    blob_detection.detect(image, overwrite_if_empty=False)
+    blob_detection.detect(image)
     # Visualize the preprocessed image used for blob detection
     preprocessed_image = blob_detection.preprocess_image(image)
     # Visualize detected blobs
@@ -39,16 +41,17 @@ def detect_garbage() -> None:
     camera = Camera(
         mock_image_path=MOCK_IMAGE_PATH,
         camera=CAMERA,
-        mock=True,
+        mock=False,
         perspective_correction_from_cache=True,
     )
-    blob_detection = BlobDetection(
-        color_channel='g',
-        blur=51
-    )
+    blob_detection_params = BlobDetectionParams()
+    blob_detection = BlobDetection(blob_detection_params)
 
     # Compose UI
     ui = UI()
+
+    # Blob detection GUI
+    gui = BlobDetectionGUI(blob_detection)
 
     window_name = 'Overhead capture'
     preprocessed_window_name = 'Preprocessed capture'
@@ -57,7 +60,7 @@ def detect_garbage() -> None:
     capture_loop = CaptureLoop(
         ui,
         window_name,
-        refresh_rate_ms=500
+        gui=gui
     )
     capture_loop.run(
         __loop,

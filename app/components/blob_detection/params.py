@@ -18,6 +18,9 @@ class BlobDetectionParams(cv2.SimpleBlobDetector_Params):  # type: ignore
     https://docs.opencv.org/3.4/d8/da7/structcv_1_1SimpleBlobDetector_1_1Params.html
     """
     # OpenCV BLOB DETECTION PARAMS
+    # Color
+    filterByColor: bool
+    blobColor: int
     # Color thresholds
     minThreshold: int
     maxThreshold: int

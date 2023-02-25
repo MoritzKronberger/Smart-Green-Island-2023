@@ -24,7 +24,8 @@ class HorizontalSlider(tk.Scale):
             to=to,
             resolution=resolution,
             orient=tk.HORIZONTAL,
-            variable=variable
+            variable=variable,
+            length=500
         )
 
 

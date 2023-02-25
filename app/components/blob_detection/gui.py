@@ -114,6 +114,40 @@ class BlobDetectionGUI(GUI):
         )
         bAmountSlider.pack()
 
+        #########
+        # Color #
+        #########
+
+        # Filter by color
+        filterByColor = tk.BooleanVar(
+            self.root,
+            name='filterByColor',
+            value=params.filterByColor
+        )
+        self.trace_var(filterByColor)
+        filterColCheckbox = Checkbox(
+            self.root,
+            label='filterByColor',
+            variable=filterByColor
+        )
+        filterColCheckbox.pack()
+        # Blob color
+        blobColor = tk.IntVar(
+            self.root,
+            name='blobColor',
+            value=params.blobColor
+        )
+        self.trace_var(blobColor)
+        bColSlider = HorizontalSlider(
+            self.root,
+            label='blobColor',
+            from_=0,
+            to=255,
+            resolution=1,
+            variable=blobColor
+        )
+        bColSlider.pack()
+
         ##############
         # Thresholds #
         ##############
@@ -192,7 +226,7 @@ class BlobDetectionGUI(GUI):
             self.root,
             label='minArea',
             from_=1,
-            to=2_000,
+            to=10_000,
             resolution=1,
             variable=minArea
         )
@@ -207,8 +241,8 @@ class BlobDetectionGUI(GUI):
         maxASlider = HorizontalSlider(
             self.root,
             label='maxArea',
-            from_=1,
-            to=2_000,
+            from_=2_500,
+            to=100_000,
             resolution=1,
             variable=maxArea
         )

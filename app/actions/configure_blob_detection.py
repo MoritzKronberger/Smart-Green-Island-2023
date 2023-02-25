@@ -1,4 +1,4 @@
-"""Detect floating garbage using blob detection and perspective correction."""
+"""Configure blob detection parameters."""
 
 import cv2
 from app.components.blob_detection import BlobDetection
@@ -16,7 +16,7 @@ def __loop(camera: Camera,
            ui: UI,
            blob_detection: BlobDetection) -> None:
     # Read capture
-    image = camera.read_capture()
+    image = camera.read_corrected_capture()
 
     # Detect floating trash blobs
     blob_detection.detect(image)
@@ -35,8 +35,8 @@ def __loop(camera: Camera,
     cv2.imshow(preprocessed_window_name, preprocessed_image)
 
 
-def detect_garbage() -> None:
-    """Detect floating garbage using blob detection and perspective correction."""
+def configure_blob_detection() -> None:
+    """Configure blob detection parameters."""
     # Create components
     camera = Camera(
         mock_image_path=MOCK_IMAGE_PATH,
@@ -44,11 +44,14 @@ def detect_garbage() -> None:
         mock=False,
         perspective_correction_from_cache=True,
     )
-    blob_detection_params = BlobDetectionParams()
+    blob_detection_params = BlobDetectionParams(
+        params_from_cache=True
+    )
     blob_detection = BlobDetection(blob_detection_params)
 
     # Compose UI
     ui = UI()
+    ui.header_text = 'Use the GUI to adjust the detection parameters'
 
     # Blob detection GUI
     gui = BlobDetectionGUI(blob_detection)

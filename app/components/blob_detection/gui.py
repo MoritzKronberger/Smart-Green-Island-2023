@@ -1,3 +1,5 @@
+"""GUI for adjusting blob detection parameters."""
+
 import tkinter as tk
 from app.components.blob_detection import BlobDetection
 from app.components.tkinter_gui import GUI, TkVar
@@ -382,6 +384,16 @@ class BlobDetectionGUI(GUI):
             variable=minDistBetweenBlobs
         )
         minDistSlider.pack()
+
+        ################
+        # Write button #
+        ################
+        writeButton = tk.Button(
+            self.root,
+            text='Write parameters to cache.',
+            command=self.blob_detection.params.__write_parameters__
+        )
+        writeButton.pack()
 
     def trace_callback(self, var: TkVar, name: str, index: str, mode: str) -> None:
         """Update blob detection parameters on Var trace."""

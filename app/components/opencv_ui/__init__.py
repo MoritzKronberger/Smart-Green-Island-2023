@@ -1,4 +1,4 @@
-"""Handle user input and UI states."""
+"""Handle OpenCV user input and UI states."""
 
 import cv2
 from .text import TextBox
@@ -31,7 +31,7 @@ class UIState():
 
 
 class UI():
-    """Handle user input and UI states."""
+    """Handle OpenCV user input and UI states."""
 
     header_text = 'Press "KEY" to toggle the menus'
     __ui_states: list[UIState] = []

@@ -6,7 +6,7 @@ import numpy as np
 import pyshine as ps
 from typing import Literal
 from app.components.helpers import create_dir_if_not_exists
-from app.components.ui import UIState
+from app.components.opencv_ui import UIState
 from app.util_types import VecFloat
 from app.logger import logger
 

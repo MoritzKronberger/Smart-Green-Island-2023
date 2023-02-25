@@ -6,7 +6,7 @@ from app.components.blob_detection.gui import BlobDetectionGUI
 from app.components.blob_detection.params import BlobDetectionParams
 from app.components.camera import Camera
 from app.components.main_loop import MainLoop
-from app.components.ui import UI
+from app.components.opencv_ui import UI
 from app.settings import CAMERA, MOCK_IMAGE_PATH
 
 

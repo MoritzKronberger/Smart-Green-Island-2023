@@ -5,7 +5,7 @@ from app.components.aruco import ArUco
 from app.components.boat import Boat, BoatUI
 from app.components.camera import Camera
 from app.components.main_loop import MainLoop
-from app.components.ui import UI
+from app.components.opencv_ui import UI
 from app.settings import ARUCO_DICT, BOAT_MARKER_ID, BOAT_MARKER_SIZE_MM, CAMERA, MOCK_IMAGE_PATH
 
 

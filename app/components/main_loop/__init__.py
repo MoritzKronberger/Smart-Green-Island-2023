@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 from typing import Any, Callable, ParamSpec
 from app.components.tkinter_gui import GUI
-from app.components.ui import UI
+from app.components.opencv_ui import UI
 from app.logger import logger
 
 P = ParamSpec('P')

@@ -4,8 +4,8 @@ import cv2
 import numpy as np
 from scipy.spatial import distance
 from app.components.aruco import ArUco, Marker
-from app.components.ui import UIState
-from app.components.ui.text import TextBox
+from app.components.opencv_ui import UIState
+from app.components.opencv_ui.text import TextBox
 from app.util_types import VecFloat
 
 

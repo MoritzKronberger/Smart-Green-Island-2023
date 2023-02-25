@@ -4,7 +4,7 @@ import cv2
 from app.components.aruco import ArUco
 from app.components.boat import Boat, BoatUI
 from app.components.camera import Camera
-from app.components.capture_loop import CaptureLoop
+from app.components.main_loop import MainLoop
 from app.components.ui import UI
 from app.settings import ARUCO_DICT, BOAT_MARKER_ID, BOAT_MARKER_SIZE_MM, CAMERA, MOCK_IMAGE_PATH
 
@@ -49,12 +49,12 @@ def track_boat() -> None:
 
     window_name = 'Overhead capture'
 
-    # Run capture loop
-    capture_loop = CaptureLoop(
+    # Run main loop
+    main_loop = MainLoop(
         ui,
         window_name
     )
-    capture_loop.run(
+    main_loop.run(
         __loop,
         camera,
         window_name,

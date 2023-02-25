@@ -5,7 +5,7 @@ from app.components.blob_detection import BlobDetection
 from app.components.blob_detection.gui import BlobDetectionGUI
 from app.components.blob_detection.params import BlobDetectionParams
 from app.components.camera import Camera
-from app.components.capture_loop import CaptureLoop
+from app.components.main_loop import MainLoop
 from app.components.ui import UI
 from app.settings import CAMERA, MOCK_IMAGE_PATH
 
@@ -56,13 +56,13 @@ def detect_garbage() -> None:
     window_name = 'Overhead capture'
     preprocessed_window_name = 'Preprocessed capture'
 
-    # Run capture loop
-    capture_loop = CaptureLoop(
+    # Run main loop
+    main_loop = MainLoop(
         ui,
         window_name,
         gui=gui
     )
-    capture_loop.run(
+    main_loop.run(
         __loop,
         camera,
         window_name,

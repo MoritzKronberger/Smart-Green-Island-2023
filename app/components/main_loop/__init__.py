@@ -1,4 +1,4 @@
-"""Capture loop for OpenCV."""
+"""Main application loop for handling OpenCV captures and tkinter GUIs."""
 
 import cv2
 import numpy as np
@@ -10,8 +10,8 @@ from app.logger import logger
 P = ParamSpec('P')
 
 
-class CaptureLoop():
-    """Handle OpenCV capture loop."""
+class MainLoop():
+    """Main application loop for handling OpenCV captures and tkinter GUIs."""
     __ui: UI
     refresh_rate_ms: int
     interactive_window: str

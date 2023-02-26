@@ -1,5 +1,6 @@
 """Utility types for the entire application."""
 
 import numpy as np
+import numpy.typing as npt
 
-VecFloat = np.ndarray[float, np.dtype[np.float32]]
+VecFloat = npt.NDArray[np.float32]

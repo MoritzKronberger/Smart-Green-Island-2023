@@ -1,9 +1,9 @@
-"""Handle user input and UI states."""
+"""Handle OpenCV user input and UI states."""
 
 import cv2
-import pyshine as ps
-from util_types import VecFloat
-from logger import logger
+from .text import TextBox
+from app.util_types import VecFloat
+from app.logger import logger
 
 
 class UIState():
@@ -31,11 +31,9 @@ class UIState():
 
 
 class UI():
-    """Handle user input and UI states."""
+    """Handle OpenCV user input and UI states."""
 
-    background_color_RGB: tuple[int, int, int] = (0, 0, 0)
-    text_color_RGB: tuple[int, int, int] = (255, 255, 255)
-    header_text = 'Available actions:'
+    header_text = 'Press "KEY" to toggle the menus'
     __ui_states: list[UIState] = []
     __ui_state: UIState | None = None
 
@@ -74,60 +72,31 @@ class UI():
 
     def render(self, image: cv2.Mat) -> None:
         """Render UI (and all UI states) to OpenCV image."""
-        # Appearance constants
-        FONT_SCALE = 0.5
-        FONT_THICKNESS = 1
-        VSPACE = 15
-        HSPACE = 50
-        # Vertical padding + text
-        CONTAINER_HEIGHT = VSPACE * 2 + 12
-
-        def __add_text(text: str, x_pos: int, y_pos: int) -> None:
-            ps.putBText(
-                image,
-                text,
-                text_offset_x=x_pos,
-                text_offset_y=y_pos,
-                vspace=VSPACE,
-                hspace=HSPACE,
-                background_RGB=self.background_color_RGB,
-                text_RGB=self.text_color_RGB,
-                font_scale=FONT_SCALE,
-                thickness=FONT_THICKNESS,
-                font=cv2.FONT_HERSHEY_SIMPLEX
-            )
-
         # Render default UI
         if self.__ui_state is None:
-            # Draw header text
-            __add_text(
-                'Press "KEY" to toggle the menus',
-                x_pos=HSPACE,
-                y_pos=VSPACE
+            # List of UI state text lines
+            ui_states_text = [f'"{state.keyname}" -> {state.name}' for state in self.__ui_states]
+            # Prepend header text to UI states text
+            ui_text = [self.header_text] + ui_states_text
+            # Draw UI text as textbox
+            ui_states_textbox = TextBox(
+                ui_text,
+                x_pos=0,
+                y_pos=0
             )
+            ui_states_textbox.render(image)
 
-            # Draw list of selectable UI states
-            for i, state in enumerate(self.__ui_states):
-                __add_text(
-                    f'"{state.keyname}" -> {state.name}',
-                    x_pos=HSPACE,
-                    # Space underneath ech other
-                    y_pos=CONTAINER_HEIGHT * (i+1) + VSPACE
-                )
         # Render UI state
         else:
-            # UI state name
-            __add_text(
-                self.__ui_state.name,
-                x_pos=HSPACE,
-                y_pos=VSPACE
+            # UI state name and instructions
+            ui_state_textbox = TextBox(
+                [self.__ui_state.name, self.__ui_state.instructions],
+                x_pos=0,
+                y_pos=0
             )
-            # UI state instructions
-            __add_text(
-                self.__ui_state.instructions,
-                x_pos=HSPACE,
-                y_pos=CONTAINER_HEIGHT + VSPACE
-            )
+            ui_state_textbox.render(image)
+
+            # UI state rendering
             self.__ui_state.render(image)
 
     def add_ui_state(self, ui_state: UIState) -> None:

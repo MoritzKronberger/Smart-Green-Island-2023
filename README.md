@@ -24,12 +24,18 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
+Create environment variables:
+
+```bash
+bash create_dotenv.sh
+```
+
 ## Run Application
 
 Run the application with:
 
 ```bash
-python main.py
+python -m app
 ```
 
 ## Typechecks and Linter
@@ -37,7 +43,7 @@ python main.py
 Run Mypy for static typechecking:
 
 ```bash
-mypy main.py
+mypy -m app
 ```
 
 Run flake8 for linting:

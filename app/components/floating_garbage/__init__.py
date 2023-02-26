@@ -63,7 +63,7 @@ class FloatingGarbage():
                 image,
                 center=center,
                 radius=int(self.size * 0.5),
-                color=(0, 0, 255),
+                color=(0, 255, 0),
                 thickness=2
             )
             # Render circle indicating the garbage center
@@ -71,7 +71,7 @@ class FloatingGarbage():
                 image,
                 center=center,
                 radius=size,
-                color=(0, 255, 0),
+                color=(0, 0, 255),
                 thickness=-1
             )
 

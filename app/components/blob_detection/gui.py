@@ -13,7 +13,11 @@ class BlobDetectionGUI(GUI):
     def __init__(self, blob_detection: BlobDetection) -> None:
         """Create new blob detection GUI."""
         # Instantiate GUI
-        super().__init__()
+        super().__init__(
+            'Configure blob detection',
+            width=560,
+            height=600
+        )
 
         self.blob_detection = blob_detection
 
@@ -27,7 +31,7 @@ class BlobDetectionGUI(GUI):
         # How to configure a GUI element:
         #
         # Declare a traced tkinter Var:
-        # Assign it to `root` and set the parameter attribute as the name and the parameter value as the value.
+        # Assign it to `frame` and set the parameter attribute as the name and the parameter value as the value.
         # Add tracing using the `trace_var` convenience function.
         #
         # Create the GIU element and pass the variable parameter.
@@ -40,38 +44,38 @@ class BlobDetectionGUI(GUI):
 
         # Extract color channel
         extractColorChannel = tk.BooleanVar(
-            self.root,
+            self.frame,
             name='extractColorChannel',
             value=params.extractColorChannel
         )
         self.trace_var(extractColorChannel)
         chanCheckbox = Checkbox(
-            self.root,
+            self.frame,
             label='extractColorChannel',
             variable=extractColorChannel
         )
         chanCheckbox.pack()
         # Color channel radio buttons
         colorChannel = tk.StringVar(
-            self.root,
+            self.frame,
             name='colorChannel',
             value=params.colorChannel
         )
         self.trace_var(colorChannel)
         rButton = tk.Radiobutton(
-            self.root,
+            self.frame,
             text='R',
             value='r',
             variable=colorChannel
         )
         gButton = tk.Radiobutton(
-            self.root,
+            self.frame,
             text='G',
             value='g',
             variable=colorChannel
         )
         bButton = tk.Radiobutton(
-            self.root,
+            self.frame,
             text='B',
             value='b',
             variable=colorChannel
@@ -86,26 +90,26 @@ class BlobDetectionGUI(GUI):
 
         # Use blurring filter
         useBlur = tk.BooleanVar(
-            self.root,
+            self.frame,
             name='useBlur',
             value=params.useBlur
         )
         self.trace_var(useBlur)
         useBCheckbox = Checkbox(
-            self.root,
+            self.frame,
             label='useBlur',
             variable=useBlur
         )
         useBCheckbox.pack()
         # Blur amount
         blurAmount = tk.IntVar(
-            self.root,
+            self.frame,
             name='blurAmount',
             value=params.blurAmount
         )
         self.trace_var(blurAmount)
         bAmountSlider = HorizontalSlider(
-            self.root,
+            self.frame,
             label='blurAmount',
             from_=2,
             to=200,
@@ -120,26 +124,26 @@ class BlobDetectionGUI(GUI):
 
         # Filter by color
         filterByColor = tk.BooleanVar(
-            self.root,
+            self.frame,
             name='filterByColor',
             value=params.filterByColor
         )
         self.trace_var(filterByColor)
         filterColCheckbox = Checkbox(
-            self.root,
+            self.frame,
             label='filterByColor',
             variable=filterByColor
         )
         filterColCheckbox.pack()
         # Blob color
         blobColor = tk.IntVar(
-            self.root,
+            self.frame,
             name='blobColor',
             value=params.blobColor
         )
         self.trace_var(blobColor)
         bColSlider = HorizontalSlider(
-            self.root,
+            self.frame,
             label='blobColor',
             from_=0,
             to=255,
@@ -154,26 +158,26 @@ class BlobDetectionGUI(GUI):
 
         # Binary thresholds checkbox
         useBinaryThresholds = tk.BooleanVar(
-            self.root,
+            self.frame,
             name='useBinaryThresholds',
             value=params.useBinaryThresholds
         )
         self.trace_var(useBinaryThresholds)
         binaryTCheckbox = Checkbox(
-            self.root,
+            self.frame,
             label='useBinaryThresholds',
             variable=useBinaryThresholds
         )
         binaryTCheckbox.pack()
         # Min threshold slider
         minThreshold = tk.IntVar(
-            self.root,
+            self.frame,
             name='minThreshold',
             value=params.minThreshold
         )
         self.trace_var(minThreshold)
         minTSlider = HorizontalSlider(
-            self.root,
+            self.frame,
             label='minThreshold',
             from_=0,
             to=255,
@@ -183,13 +187,13 @@ class BlobDetectionGUI(GUI):
         minTSlider.pack()
         # Max threshold slider
         maxThreshold = tk.IntVar(
-            self.root,
+            self.frame,
             value=params.maxThreshold,
             name='maxThreshold'
         )
         self.trace_var(maxThreshold)
         maxTSlider = HorizontalSlider(
-            self.root,
+            self.frame,
             label='maxThreshold',
             from_=0,
             to=255,
@@ -204,26 +208,26 @@ class BlobDetectionGUI(GUI):
 
         # Filter by area checkbox
         filterByArea = tk.BooleanVar(
-            self.root,
+            self.frame,
             name='filterByArea',
             value=params.filterByArea
         )
         self.trace_var(filterByArea)
         filterACheckbox = Checkbox(
-            self.root,
+            self.frame,
             label='filterByArea',
             variable=filterByArea
         )
         filterACheckbox.pack()
         # Min area slider
         minArea = tk.DoubleVar(
-            self.root,
+            self.frame,
             name='minArea',
             value=params.minArea
         )
         self.trace_var(minArea)
         minASlider = HorizontalSlider(
-            self.root,
+            self.frame,
             label='minArea',
             from_=1,
             to=10_000,
@@ -233,13 +237,13 @@ class BlobDetectionGUI(GUI):
         minASlider.pack()
         # Max area slider
         maxArea = tk.DoubleVar(
-            self.root,
+            self.frame,
             name='maxArea',
             value=params.maxArea
         )
         self.trace_var(maxArea)
         maxASlider = HorizontalSlider(
-            self.root,
+            self.frame,
             label='maxArea',
             from_=2_500,
             to=100_000,
@@ -254,26 +258,26 @@ class BlobDetectionGUI(GUI):
 
         # Filter by circularity
         filterByCircularity = tk.BooleanVar(
-            self.root,
+            self.frame,
             name='filterByCircularity',
             value=params.filterByCircularity
         )
         self.trace_var(filterByCircularity)
         filterCircCheckbox = Checkbox(
-            self.root,
+            self.frame,
             label='filterByCircularity',
             variable=filterByCircularity
         )
         filterCircCheckbox.pack()
         # Min circularity slider
         minCircularity = tk.DoubleVar(
-            self.root,
+            self.frame,
             name='minCircularity',
             value=params.minCircularity
         )
         self.trace_var(minCircularity)
         minCircSlider = HorizontalSlider(
-            self.root,
+            self.frame,
             label='minCircularity',
             from_=0.1,
             to=1,
@@ -283,13 +287,13 @@ class BlobDetectionGUI(GUI):
         minCircSlider.pack()
         # Max circularity slider
         maxCircularity = tk.DoubleVar(
-            self.root,
+            self.frame,
             name='maxCircularity',
             value=params.maxCircularity
         )
         self.trace_var(maxCircularity)
         maxCircSlider = HorizontalSlider(
-            self.root,
+            self.frame,
             label='maxCircularity',
             from_=0.1,
             to=1,
@@ -304,26 +308,26 @@ class BlobDetectionGUI(GUI):
 
         # Filter by convexity
         filterByConvexity = tk.BooleanVar(
-            self.root,
+            self.frame,
             name='filterByConvexity',
             value=params.filterByConvexity
         )
         self.trace_var(filterByConvexity)
         filterConvCheckbox = Checkbox(
-            self.root,
+            self.frame,
             label='filterByConvexity',
             variable=filterByConvexity
         )
         filterConvCheckbox.pack()
         # Min convexity slider
         minConvexity = tk.DoubleVar(
-            self.root,
+            self.frame,
             name='minConvexity',
             value=params.minConvexity
         )
         self.trace_var(minConvexity)
         minConvSlider = HorizontalSlider(
-            self.root,
+            self.frame,
             label='minConvexity',
             from_=0.1,
             to=1,
@@ -333,13 +337,13 @@ class BlobDetectionGUI(GUI):
         minConvSlider.pack()
         # Max convexity slider
         maxConvexity = tk.DoubleVar(
-            self.root,
+            self.frame,
             name='maxConvexity',
             value=params.maxConvexity
         )
         self.trace_var(maxConvexity)
         maxConvSlider = HorizontalSlider(
-            self.root,
+            self.frame,
             label='maxConvexity',
             from_=0.1,
             to=1,
@@ -354,26 +358,26 @@ class BlobDetectionGUI(GUI):
 
         # Filter by inertia
         filterByInertia = tk.BooleanVar(
-            self.root,
+            self.frame,
             name='filterByInertia',
             value=params.filterByInertia
         )
         self.trace_var(filterByInertia)
         filterInCheckbox = Checkbox(
-            self.root,
+            self.frame,
             label='filterByInertia',
             variable=filterByInertia
         )
         filterInCheckbox.pack()
         # Min inertia slider
         minInertiaRatio = tk.DoubleVar(
-            self.root,
+            self.frame,
             name='minInertiaRatio',
             value=params.minInertiaRatio
         )
         self.trace_var(minInertiaRatio)
         minInSlider = HorizontalSlider(
-            self.root,
+            self.frame,
             label='minInertiaRatio',
             from_=0.1,
             to=1,
@@ -383,13 +387,13 @@ class BlobDetectionGUI(GUI):
         minInSlider.pack()
         # Max inertia slider
         maxInertiaRatio = tk.DoubleVar(
-            self.root,
+            self.frame,
             name='maxInertiaRatio',
             value=params.maxInertiaRatio
         )
         self.trace_var(maxInertiaRatio)
         maxInSlider = HorizontalSlider(
-            self.root,
+            self.frame,
             label='maxInertiaRatio',
             from_=0.1,
             to=1,
@@ -404,13 +408,13 @@ class BlobDetectionGUI(GUI):
 
         # Min distance between blobs
         minDistBetweenBlobs = tk.DoubleVar(
-            self.root,
+            self.frame,
             name='minDistBetweenBlobs',
             value=params.minDistBetweenBlobs
         )
         self.trace_var(minDistBetweenBlobs)
         minDistSlider = HorizontalSlider(
-            self.root,
+            self.frame,
             label='minDistBetweenBlobs',
             from_=0,
             to=2_000,
@@ -423,7 +427,7 @@ class BlobDetectionGUI(GUI):
         # Write button #
         ################
         writeButton = tk.Button(
-            self.root,
+            self.frame,
             text='Write parameters to cache.',
             command=self.blob_detection.params.__write_parameters__
         )

@@ -10,7 +10,7 @@ class HorizontalSlider(tk.Scale):
     """Horizontal slider base on `tkinter.Scale`."""
 
     def __init__(self,
-                 master: tk.Tk,
+                 master: tk.Frame,
                  label: str,
                  from_: Number,
                  to: Number,
@@ -31,7 +31,7 @@ class HorizontalSlider(tk.Scale):
 
 class Checkbox(tk.Checkbutton):
     """Checkbox base on `tkinter.Checkbutton`."""
-    def __init__(self, master: tk.Tk, label: str, variable: tk.BooleanVar) -> None:
+    def __init__(self, master: tk.Frame, label: str, variable: tk.BooleanVar) -> None:
         """Create new checkbox."""
         super().__init__(
             master,
